@@ -1,7 +1,6 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getMessaging, onBackgroundMessage } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging.js";
+importScripts("https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging-compat.js");
 
-// Read Firebase config from the URL query string used when registering the SW
 const searchParams = new URL(self.location.href).searchParams;
 const firebaseConfig = {
   apiKey: searchParams.get("apiKey") || "",
@@ -12,11 +11,11 @@ const firebaseConfig = {
   appId: searchParams.get("appId") || ""
 };
 
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
 
-// Display notification when the app is in the background or closed
-onBackgroundMessage(messaging, (payload) => {
+// Background notifications
+messaging.onBackgroundMessage((payload) => {
   const title =
     payload.notification?.title ||
     payload.data?.title ||
@@ -33,7 +32,7 @@ onBackgroundMessage(messaging, (payload) => {
   });
 });
 
-// Open or focus the app when the notification is tapped
+// Tap notification to open/focus app
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   const targetUrl = event.notification.data?.url || "/";
@@ -51,4 +50,3 @@ self.addEventListener("notificationclick", (event) => {
     })
   );
 });
-                    
