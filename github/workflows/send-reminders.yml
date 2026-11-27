@@ -2,7 +2,7 @@ name: Send Medicine Reminders
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "* * * * *"
   workflow_dispatch:
 
 jobs:
@@ -16,17 +16,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm"
-          cache-dependency-path: scripts/package-lock.json
 
       - name: Install dependencies
-        working-directory: scripts
-        run: npm ci
+        run: npm install --no-save firebase-admin
 
       - name: Send due reminders
-        working-directory: scripts
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          APP_URL: ${{ vars.APP_URL }}
-        run: node send-reminders.js
+          APP_URL: ${{ vars.APP_URL || "https://medicine-reminder-flax.vercel.app" }}
+        run: node scripts/send-reminder.js
         
