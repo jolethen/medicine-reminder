@@ -23,6 +23,6 @@ jobs:
       - name: Send due reminders
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          APP_URL: ${{ vars.APP_URL || "https://medicine-reminder-flax.vercel.app" }}
+          APP_URL: ${{ vars.APP_URL || 'https://medicine-reminder-flax.vercel.app' }}
         run: node scripts/send-reminder.js
         
