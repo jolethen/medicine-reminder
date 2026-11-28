@@ -2,8 +2,12 @@ name: Send Medicine Reminders
 
 on:
   schedule:
-    - cron: "* * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
+
+concurrency:
+  group: medicine-reminder-sender
+  cancel-in-progress: false
 
 jobs:
   remind:
